@@ -1,10 +1,24 @@
 name = "ETOPO"
 uuid = "eb8fb1ab-fde0-4497-ad36-194d38f2cde7"
 authors = ["Nathanael Wong <natgeo.wong@outlook.com> and contributors"]
-version = "1.0.0-DEV"
+version = "0.1.0"
+
+[deps]
+Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
+LandSea = "cbf7bb22-a1a6-46cb-8b24-174e3bc5fc04"
+Logging = "56ddb016-857b-54e1-b83d-db4d58db5568"
+NCDatasets = "85f8d34a-cbdd-5861-8df4-14fed0d494ab"
+Printf = "de0858da-6303-5e67-8744-51eddeeeb8d7"
+Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+RegionGrids = "ecebd26c-3930-4a82-94f6-9df2a191b288"
 
 [compat]
-julia = "1.6.7"
+Dates = "1.11.0"
+Logging = "1.11.0"
+NCDatasets = "0.14.6"
+Printf = "1.11.0"
+Reexport = "1.2.2"
+julia = "^1.10"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
