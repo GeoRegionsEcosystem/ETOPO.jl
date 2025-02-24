@@ -4,8 +4,8 @@ layout: home
 
 hero:
   name: "ETOPO.jl"
-  text: "Extraction of Gridded Geospatial Data"
-  tagline: Subsetting and Extracting Gridded Geospatial Data for Geographic Regions of Interest.
+  text: "Downloading ETOPO Relief Datasets"
+  tagline: Download, extract and manipulate the ETOPO Global Relief Model using this lightweight Julia package.
   image:
     src: /logo.png
     alt: ETOPO
@@ -21,18 +21,18 @@ hero:
       link: https://github.com/GeoRegionsEcosystem/ETOPO.jl
 
 features:
-  - title: 🌍 Define Grids of Interest
-    details: You have a (Geo)Region of interest and some gridded data? Let's define a Grid for it.
-  - title: ⚙️ Flexible Grid Types
-    details: Maybe your data isn't rectilinear on the Lon/Lat Grid? Don't worry, we've got you covered.
-  - title: 🔍 Extraction made Easy
-    details: Already defined a Grid for your (Geo)Region of interest? Now let's Extract Some Data!
+  - title: 🔍 Comprehensive
+    details: There are several different options of choice for you, be it resolution, or surface-type from which the topography is measured.
+  - title: 🌍 Topography of Interest
+    details: You don't have to download the global topography, only for your (Geo)Region of interest, saving you time and disk space for small domains.
+  - title: 🏔️ LandSea Mask
+    details: Is it Land or is it Ocean? Currently we use the topographic height to determine this feature, but more updates are on the way!
 ---
 ```
 
 ## Introduction
 
-ETOPO.jl is a lightweight Julia package that builds upon the [GeoRegions Ecosystem](https://github.com/GeoRegionsEcosystem), and in particular [LandSea.jl](https://github.com/GeoRegionsEcosystem/LandSea.jl) to download the ETOPO topographical datasets.
+ETOPO.jl is a lightweight Julia package that builds upon the [GeoRegions Ecosystem](https://github.com/GeoRegionsEcosystem), and in particular [LandSea.jl](https://github.com/GeoRegionsEcosystem/LandSea.jl), to download the ETOPO topographical datasets.
 
 ## Installation Instructions
 
