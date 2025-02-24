@@ -71,8 +71,9 @@ function getLandSea(
 
             roro = extract(goro,ggrd)
             rlsm = deepcopy(roro)
-            rlsm[roro .>= 0] .= 1
-            rlsm[roro .<  0] .= 0
+            rlsm[roro .>= 0]   .= 1
+            rlsm[roro .<  0]   .= 0
+            rlsm[isnan.(roro)] .= NaN
 
             save(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
 
@@ -152,8 +153,9 @@ function getLandSea(
             end
         end
 
-        rlsm[roro .>= 0] .= 1
-        rlsm[roro .<  0] .= 0
+        rlsm[roro .>= 0]   .= 1
+        rlsm[roro .<  0]   .= 0
+        rlsm[isnan.(roro)] .= NaN
 
         @info "$(modulelog()) - Extracting the regional ETOPO1 Land-Sea mask for the \"$(geo.ID)\" has completed"
 

@@ -18,8 +18,8 @@ makedocs(;
     ),
     pages=[
         "Home"            => "index.md",
-        # "Getting Started" => "etopo.md",
-        # "API List"        => "api.md",
+        "Getting Started" => "etopo.md",
+        "API List"        => "api.md",
     ],
 )
 
