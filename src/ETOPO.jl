@@ -1,18 +1,20 @@
 module ETOPO
 
 using Dates
+using GeoRegions
 using LandSea
 using Logging
 using Printf
+using RegionGrids
 
 import LandSea: getLandSea
 
 using Reexport
-@reexport using RegionGrids
+@reexport using GeoRegions
 @reexport using NCDatasets
 
 export
-        getLandSea
+        getLandSea, ETOPODataset
 
 struct ETOPODataset{ST<:AbstractString}
     path :: ST
