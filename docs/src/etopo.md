@@ -59,7 +59,7 @@ ax2 = Axis(
     fig[2,1],width=400,height=400*(geo.N-geo.S+2)/(geo.E-geo.W+4),
     limits=(geo.W-2,geo.E+2,geo.S-1,geo.N+1)
 )
-heatmap!(ax2,lsd.lon,lsd.lat,lsd.z ./1e3,colorrange=(-10,10),colormap=:topo)
+heatmap!(ax2,lsd.lon,lsd.lat,lsd.z ./1e3,colorrange=(-2,2),colormap=:topo)
 lines!(ax2,clon,clat,color=:black,linewidth=1)
 
 resize_to_layout!(fig)
