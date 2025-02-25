@@ -7,6 +7,7 @@ using Logging
 using Printf
 using RegionGrids
 
+import Base: show
 import LandSea: getLandSea
 
 using Reexport
