@@ -99,7 +99,7 @@ function getLandSea(
         
     else
 
-        @info "$(modulelog()) - Opening global ETOPO1 Land-Sea mask dataset from OPeNDAP servers ..."
+        @info "$(modulelog()) - Opening global ETOPO Land-Sea mask dataset from OPeNDAP servers ..."
 
         etopods = NCDataset(joinpath(
             "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022","$(resolution)s",
@@ -135,7 +135,7 @@ function getLandSea(
             ilat = ilat[1] : ilat[end]
         end
 
-        @info "$(modulelog()) - Extracting regional ETOPO1 Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global ETOPO1 Land-Sea mask dataset ..."
+        @info "$(modulelog()) - Extracting regional ETOPO Land-Sea mask for the \"$(geo.ID)\" GeoRegion from the Global ETOPO Land-Sea mask dataset ..."
 
         if !shift
             NCDatasets.load!(etopods["z"].var,roro,ilon,ilat)
@@ -156,7 +156,7 @@ function getLandSea(
         rlsm[roro .<  0]   .= 0
         rlsm[isnan.(roro)] .= NaN
 
-        @info "$(modulelog()) - Extracting the regional ETOPO1 Land-Sea mask for the \"$(geo.ID)\" has completed"
+        @info "$(modulelog()) - Extracting the regional ETOPO Land-Sea mask for the \"$(geo.ID)\" has completed"
 
         return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro)
 
