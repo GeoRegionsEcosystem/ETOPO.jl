@@ -15,7 +15,7 @@ RegionGrids = "ecebd26c-3930-4a82-94f6-9df2a191b288"
 
 [compat]
 Dates = "1"
-GeoRegions = "8.0.1"
+GeoRegions = "^8.0.1"
 LandSea = "0.1"
 Logging = "1"
 NCDatasets = "0.14"
