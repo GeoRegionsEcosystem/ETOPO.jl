@@ -42,7 +42,7 @@ Now, let us retrieve the ETOPO Relief data without needing to download anything
 lsd = getLandSea(etd,geo)
 ```
 
-And then now we plot it
+And then now we plot both the land-sea mask (top), and the topographic height (bottom).
 
 ```@example example
 fig = Figure()
@@ -59,7 +59,7 @@ ax2 = Axis(
     fig[2,1],width=400,height=400*(geo.N-geo.S+2)/(geo.E-geo.W+4),
     limits=(geo.W-2,geo.E+2,geo.S-1,geo.N+1)
 )
-heatmap!(ax2,lsd.lon,lsd.lat,lsd.z ./1e3,colorrange=(-5,5),colormap=:topo)
+heatmap!(ax2,lsd.lon,lsd.lat,lsd.z ./1e3,colorrange=(-10,10),colormap=:topo)
 lines!(ax2,clon,clat,color=:black,linewidth=1)
 
 resize_to_layout!(fig)
