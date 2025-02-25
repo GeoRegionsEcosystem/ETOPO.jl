@@ -2,7 +2,6 @@
     getLandSea(
         etd  :: ETOPODataset,
         geo  :: GeoRegion = GeoRegion("GLB");
-        path :: AbstractString = homedir(),
         resolution :: Int = 60,
         returnlsd :: Bool = false,
         savelsd   :: Bool = false,
@@ -13,11 +12,11 @@ Retrieve ETOPO 2022 data for a GeoRegion from OPeNDAP servers
 
 Arguments
 =========
+- `etd` : The ETOPO Dataset containing information on the path to save ETOPO data to
 - `geo` : The GeoRegion of interest
 
 Keyword Arguments
 =================
-- `path` :: The path to which an `ETOPO` folder is created within and ETOPO LandSea data saved into
 - `resolution` : The resolution of the dataset to be downloaded, in units of arc-seconds.  Possible values are 15, 30 and 60, default is 60.
 - `savelsd` : Save LandSea dataset into a local NetCDF file.
 - `returnlsd` : If `savelsd = true`, you can choose to simply save the data into the NetCDF file, or load return it as a `LandSea` dataset. Otherwise, if `savelsd = false`, you always return the `LandSea` dataset.
@@ -45,16 +44,16 @@ function getLandSea(
 
     if savelsd
 
-        if !isdir(joinpath(etd.path,"ETOPO")); mkpath(joinpath(etd.path,"ETOPO")) end
+        !isdir(etd.path) ? mkpath(etd.path) : nothing
 
         fid = "etopo-$(type)-$(geo.ID)_$(resolution)arcsec.nc"
-        lsmfnc = joinpath(etd.path,"ETOPO",fid)
+        lsmfnc = joinpath(etd.path,fid)
 
         if !isfile(lsmfnc)
 
             @info "$(modulelog()) - The ETOPO $(uppercase(type)) Land-Sea mask dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global ETOPO $(uppercase(type)) Land-Sea mask dataset ..."
 
-            glbfnc = joinpath(etd.path,"ETOPO","etopo-$(type)-GLB_$(resolution)arcsec.nc")
+            glbfnc = joinpath(etd.path,"etopo-$(type)-GLB_$(resolution)arcsec.nc")
             if !isfile(glbfnc); setup(type,etd.path,resolution) end
 
             gds  = NCDataset(glbfnc)
@@ -176,7 +175,7 @@ function save(
     eres :: Int,
 )
 
-    fnc = joinpath(path,"ETOPO","etopo-$(type)-$(geo.ID)_$(eres)arcsec.nc")
+    fnc = joinpath(etopopath(path),"etopo-$(type)-$(geo.ID)_$(eres)arcsec.nc")
     if isfile(fnc)
         rm(fnc,force=true)
     end
@@ -257,11 +256,11 @@ function setup(
 
     close(eds)
 
-	save(GeoRegion("GLB"),lon,lat,lsm,oro,path,type,resolution)
+	save(GeoRegion("GLB"),lon,lat,lsm,oro,etopopath(path),type,resolution)
 
     rm("tmp.nc",force=true)
 
-    gds  = NCDataset(joinpath(path,"ETOPO","etopo-$(type)-GLB_$(resolution)arcsec.nc"))
+    gds  = NCDataset(joinpath(etopopath(path),"etopo-$(type)-GLB_$(resolution)arcsec.nc"))
     glon = gds["longitude"][:]
     glat = gds["latitude"][:]
     goro = gds["z"][:,:]
@@ -276,6 +275,6 @@ function setup(
     rlsm[roro .>= 0] .= 1
     rlsm[roro .<  0] .= 0
 
-    save(GeoRegion("GLB"),ggrd.lon,ggrd.lat,rlsm,roro,path,type,resolution)
+    save(GeoRegion("GLB"),ggrd.lon,ggrd.lat,rlsm,roro,etopopath(path),type,resolution)
 
 end
