@@ -7,7 +7,7 @@ hero:
   text: "Downloading ETOPO Relief Datasets"
   tagline: Download, extract and manipulate the ETOPO Global Relief Model using this lightweight Julia package.
   image:
-    src: /logo.gif
+    src: /logo.png
     alt: ETOPO
   actions:
     - theme: brand
