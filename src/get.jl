@@ -47,10 +47,12 @@ function getLandSea(
     if !isfile(lsmfnc)
 
         @info "$(modulelog()) - The ETOPO $(uppercase(type)) Relief dataset for the \"$(geo.ID)\" GeoRegion is not available, extracting from Global ETOPO $(uppercase(type)) Relief dataset ..."
+        flush(stderr)
 
         area = (geo.E-geo.W)/360 * (geo.N-geo.S)/180
         if area > 0.1 * (resolution/60)^2
             @info "$(modulelog()) - The total specified area covers more than $(10 * (resolution/60)^2)% of global points, set `downloadglb = true` ..."
+            flush(stderr)
             downloadglb = true
         end
         glbfnc = joinpath(etd.path,"etopo-$(type)-GLB_$(resolution)arcsec.nc")
@@ -59,8 +61,10 @@ function getLandSea(
 
             if isfile(glbfnc)
                 @info "$(modulelog()) - The Global ETOPO $(uppercase(type)) Relief dataset has already been downloaded, now using it for extraction ..."
+                flush(stderr)
             else
                 @info "$(modulelog()) - Downloading the Global ETOPO $(uppercase(type)) Relief dataset ..."
+                flush(stderr)
                 setup(type,etd.path,resolution)
             end
 
@@ -75,6 +79,7 @@ function getLandSea(
             nlat = length(ggrd.ilat)
 
             @info "$(modulelog()) - Extracting regional ETOPO $(uppercase(type)) Relief data for the \"$(geo.ID)\" GeoRegion from the Global ETOPO Relief dataset ..."
+            flush(stderr)
 
             roro = extract(goro,ggrd)
             rlsm = deepcopy(roro)
@@ -83,12 +88,14 @@ function getLandSea(
             rlsm[isnan.(roro)] .= NaN
 
             @info "$(modulelog()) - Saving the regional ETOPO Relief data for \"$(geo.ID)\" GeoRegion ..."
+            flush(stderr)
 
             save(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
 
         else
 
             @info "$(modulelog()) - Opening global ETOPO Relief dataset directly from OPeNDAP servers ..."
+            flush(stderr)
 
             etopods = NCDataset(joinpath(
                 "https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022","$(resolution)s",
@@ -123,6 +130,7 @@ function getLandSea(
             end
     
             @info "$(modulelog()) - Extracting regional ETOPO Relief data for the \"$(geo.ID)\" GeoRegion from the Global ETOPO Relief dataset ..."
+            flush(stderr)
     
             if !shift
                 NCDatasets.load!(etopods["z"].var,roro,ilon,ilat)
@@ -144,6 +152,7 @@ function getLandSea(
             rlsm[isnan.(roro)] .= NaN
     
             @info "$(modulelog()) - Saving the regional ETOPO Relief data for \"$(geo.ID)\" GeoRegion ..."
+            flush(stderr)
     
             save(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
 
@@ -159,6 +168,7 @@ function getLandSea(
     close(lds)
 
     @info "$(modulelog()) - Retrieving the regional ETOPO $(uppercase(type)) Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
+    flush(stderr)
 
     return LandSeaTopo{FT,FT}(lon,lat,lsm,oro)
 
@@ -234,6 +244,7 @@ function setup(
 )
 
     @info "$(modulelog()) - The Global ETOPO $(uppercase(type)) Land-Sea mask dataset is not available, downloading from ETOPO OPeNDAP servers ..."
+    flush(stderr)
     
     download(joinpath(
         "https://www.ngdc.noaa.gov/thredds/fileServer/global/ETOPO2022","$(resolution)s",
@@ -269,6 +280,7 @@ function setup(
     ggrd = RegionGrid(GeoRegion("GLB"),glon,glat)
 
     @info "$(modulelog()) - Extracting regional ETOPO $(uppercase(type)) Land-Sea mask for the \"GLB\" GeoRegion from the Global ETOPO Land-Sea mask dataset ..."
+    flush(stderr)
     
     roro = extract(goro,ggrd)
     rlsm = deepcopy(roro)
