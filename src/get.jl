@@ -24,6 +24,7 @@ function getLandSea(
 	geo  :: GeoRegion = GeoRegion("GLB");
     resolution  :: Int = 60,
     downloadglb :: Bool = false,
+    save        :: Bool = true,
     FT = Float32
 )
 
@@ -65,7 +66,7 @@ function getLandSea(
             else
                 @info "$(modulelog()) - Downloading the Global ETOPO $(uppercase(type)) Relief dataset ..."
                 flush(stderr)
-                setup(type,etd.path,resolution)
+                setupLandSea(type,etd.path,resolution)
             end
 
             gds  = NCDataset(glbfnc)
@@ -87,10 +88,14 @@ function getLandSea(
             rlsm[roro .<  0]   .= 0
             rlsm[isnan.(roro)] .= NaN
 
-            @info "$(modulelog()) - Saving the regional ETOPO Relief data for \"$(geo.ID)\" GeoRegion ..."
-            flush(stderr)
+            if save
+                @info "$(modulelog()) - Saving the regional ETOPO Relief data for \"$(geo.ID)\" GeoRegion ..."
+                flush(stderr)
+        
+                saveLandSea(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
+            end
 
-            save(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
+            return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro)
 
         else
 
@@ -151,30 +156,36 @@ function getLandSea(
             rlsm[roro .<  0]   .= 0
             rlsm[isnan.(roro)] .= NaN
     
-            @info "$(modulelog()) - Saving the regional ETOPO Relief data for \"$(geo.ID)\" GeoRegion ..."
-            flush(stderr)
-    
-            save(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
+            if save
+                @info "$(modulelog()) - Saving the regional ETOPO Relief data for \"$(geo.ID)\" GeoRegion ..."
+                flush(stderr)
+        
+                saveLandSea(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
+            end
+
+            return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro)
 
         end
 
+    else
+
+        lds = NCDataset(lsmfnc)
+        lon = lds["longitude"][:]
+        lat = lds["latitude"][:]
+        lsm = nomissing(lds["lsm"][:,:], NaN)
+        oro = nomissing(lds["z"][:,:],   NaN)
+        close(lds)
+
+        @info "$(modulelog()) - Retrieving the regional ETOPO $(uppercase(type)) Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
+        flush(stderr)
+
+        return LandSeaTopo{FT,FT}(lon,lat,lsm,oro)
+
     end
-
-    lds = NCDataset(lsmfnc)
-    lon = lds["longitude"][:]
-    lat = lds["latitude"][:]
-    lsm = nomissing(lds["lsm"][:,:], NaN)
-    oro = nomissing(lds["z"][:,:],   NaN)
-    close(lds)
-
-    @info "$(modulelog()) - Retrieving the regional ETOPO $(uppercase(type)) Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
-    flush(stderr)
-
-    return LandSeaTopo{FT,FT}(lon,lat,lsm,oro)
 
 end
 
-function save(
+function saveLandSea(
     geo  :: GeoRegion,
     lon  :: Vector{<:Real},
     lat  :: Vector{<:Real},
@@ -237,7 +248,7 @@ function save(
 
 end
 
-function setup(
+function setupLandSea(
     type :: AbstractString,
     path :: AbstractString,
     resolution :: Int,
@@ -267,7 +278,7 @@ function setup(
 
     close(eds)
 
-	save(GeoRegion("GLB"),lon,lat,lsm,oro,etopopath(path),type,resolution)
+	saveLandSea(GeoRegion("GLB"),lon,lat,lsm,oro,etopopath(path),type,resolution)
 
     rm("tmp.nc",force=true)
 
@@ -287,6 +298,6 @@ function setup(
     rlsm[roro .>= 0] .= 1
     rlsm[roro .<  0] .= 0
 
-    save(GeoRegion("GLB"),ggrd.lon,ggrd.lat,rlsm,roro,etopopath(path),type,resolution)
+    saveLandSea(GeoRegion("GLB"),ggrd.lon,ggrd.lat,rlsm,roro,etopopath(path),type,resolution)
 
 end
