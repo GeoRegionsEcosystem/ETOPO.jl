@@ -4,7 +4,6 @@
         geo  :: GeoRegion = GeoRegion("GLB");
         resolution  :: Int = 60,
         downloadglb :: Bool = false
-        FT = Float32
     ) -> LandSea
 
 Retrieve ETOPO 2022 data for a GeoRegion from OPeNDAP servers, or from a previously downloaded Global ETOPO Relief dataset.
@@ -25,7 +24,6 @@ function getLandSea(
     resolution  :: Int = 60,
     downloadglb :: Bool = false,
     save        :: Bool = true,
-    FT = Float32
 )
 
     # if bedrock
@@ -95,7 +93,7 @@ function getLandSea(
                 saveLandSea(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
             end
 
-            return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro)
+            return LandSeaTopo(ggrd.lon,ggrd.lat,rlsm,roro)
 
         else
 
@@ -163,7 +161,7 @@ function getLandSea(
                 saveLandSea(geo,ggrd.lon,ggrd.lat,rlsm,roro,etd.path,type,resolution)
             end
 
-            return LandSeaTopo{FT,FT}(ggrd.lon,ggrd.lat,rlsm,roro)
+            return LandSeaTopo(ggrd.lon,ggrd.lat,rlsm,roro)
 
         end
 
@@ -179,7 +177,7 @@ function getLandSea(
         @info "$(modulelog()) - Retrieving the regional ETOPO $(uppercase(type)) Land-Sea mask for the \"$(geo.ID)\" GeoRegion ..."
         flush(stderr)
 
-        return LandSeaTopo{FT,FT}(lon,lat,lsm,oro)
+        return LandSeaTopo(lon,lat,lsm,oro)
 
     end
 
