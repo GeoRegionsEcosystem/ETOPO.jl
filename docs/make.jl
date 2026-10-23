@@ -2,7 +2,6 @@ using Documenter
 using DocumenterVitepress
 using ETOPO
 
-using ColorSchemes
 import CairoMakie
 
 CairoMakie.activate!(type = "svg")

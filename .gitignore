@@ -26,3 +26,7 @@ docs/extra
 
 # MacOS stuff
 *.DS_Store
+
+# DocumenterVitepress / npm
+docs/node_modules
+docs/package-lock.json
